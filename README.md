@@ -193,21 +193,36 @@ Pip will automatically replace the older version with the latest release.
 
 ## 🧪 Continuous Integration (CI)
 
-Gitree uses Continuous Integration (CI) to ensure code quality and prevent regressions on every change.
+Gitree uses Continuous Integration (CI) to ensure code quality and prevent breaking features on changes/refactoring.
+
 
 ### What CI Does
 - Runs automated checks on every pull request
 - Verifies that all CLI arguments work as expected
 - Ensures the tool behaves consistently across updates
 
+
 ### Current Test Coverage
 
 | Test Type | Description |
 |----------|-------------|
-| CLI Argument Tests | Validates all supported CLI flags and options |
-| Workflow Checks | Ensures PRs follow required checks before merging |
+| CLI Argument Tests | Currently validates most-used CLI flags and options |
+| Workflow Checks | Every Pull Request requires passing these checks before merging |
 
+> [!NOTE]
 > ℹ️ CI tests are continuously expanding as new features are added.
+
+
+### Implementation details
+The CI configuration is defined in `.github/workflows/`
+
+Each workflow file specifies:
+- Trigger conditions (i.e. pull request)
+- The Python version(s) used
+- The commands executed during the pipeline
+
+If any step fails, the pipeline will fail and the pull request cannot be merged until the issue is resolved.
+
 
 
 ## ⚙️ CLI Arguments
