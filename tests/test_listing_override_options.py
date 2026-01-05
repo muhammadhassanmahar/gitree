@@ -8,7 +8,7 @@ class TestListingControlFlags(BaseCLISetup):
     These flags control what gets displayed in the tree output.
     """
 
-    def test_entry_point_no_files(self):
+    def test_no_files(self):
         result = self._run_cli("--no-files")
 
         self.assertEqual(result.returncode, 0, msg=result.stderr)
@@ -18,11 +18,11 @@ class TestListingControlFlags(BaseCLISetup):
         self.assertNotIn("nested.txt", result.stdout)
 
 
-    def test_entry_point_no_max_items(self):
+    def test_no_max_entries(self):
         # Override base structure for this test
         (self.root / "file.txt").unlink()
 
-        for i in range(30):  # default limit is 20
+        for i in range(30):  # Assume default limit is 20
             (self.root / "folder" / f"file{i}.txt").write_text("data")
 
         result = self._run_cli("--no-max-items", "--no-max-entries")
@@ -34,7 +34,7 @@ class TestListingControlFlags(BaseCLISetup):
             self.assertIn(f"file{i}.txt", result.stdout)
 
 
-    def test_entry_point_no_color(self):
+    def test_no_color(self):
         # Create additional structure
         (self.root / ".hidden_file").write_text("hidden")
 
