@@ -201,6 +201,7 @@ gitree --export project --format md
 | `-e`, `--emoji`   | Show **emojis** in the output for better visual clarity.                                      |
 | `-i`, `--interactive` | Use **interactive mode** for manual file selection after automatic filtering.            |
 | `-c`, `--copy`    | **Copy** file contents and project structure to **clipboard** (great for LLM prompts).        |
+| `--only-types`    | Include **only specific code extensions** (e.g., `--only-types py cpp tsx`).                  |
 
 ### Output & Export Options
 
@@ -221,7 +222,7 @@ gitree --export project --format md
 | `--max-entries`              | Limit **entries (files/dirs)** to be selected for the overall output.                   |
 | `--max-depth`                | **Maximum depth** to traverse when selecting files.                                     |
 | `--gitignore-depth`          | Limit depth to look for during **`.gitignore` processing**.                             |
-| `--hidden-items`,`--all`     | Show **hidden files and directories**.                                                  |
+| `-a`, `--hidden-items`, `--all`     | Show **hidden files and directories**.                                                  |
 | `--exclude [pattern ...]`    | **Patterns of files** to specifically exclude.                                          |
 | `--exclude-depth`            | Limit depth for **exclude patterns**.                                                   |
 | `--include [pattern ...]`    | **Patterns of files** to specifically include.                                          |

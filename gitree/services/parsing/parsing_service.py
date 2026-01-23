@@ -31,12 +31,12 @@ class ParsingService:
     """
     CLI parsing service for gitree tool. 
 
-    Wraps argument parsing and validation into a class. Call parse_args
+    Wraps argument parsing and validation into a class. Call run
     to get a Config object.
     """
 
     @staticmethod
-    def parse_args(ctx: AppContext) -> Config:
+    def run(ctx: AppContext) -> Config:
         """
         Public function to parse command-line arguments for the gitree tool.
 
@@ -109,13 +109,15 @@ class ParsingService:
         Correct and validate CLI arguments in place.
         """
         
+        # Correcting export path
         if getattr(args, "export", None) is not None:
             args.export = ParsingService._fix_output_path(
                 ctx, args.export,
                 default_extensions={"tree": ".txt", "json": ".json", "md": ".md"},
-                format_str=args.format
-            )
+                format_str=args.format)
+            
 
+        # Correcting zip path
         if getattr(args, "zip", None):
             args.zip = ParsingService._fix_output_path(ctx, args.zip, default_extension=".zip")
 
@@ -128,6 +130,7 @@ class ParsingService:
         if getattr(args, "only_types", None):
             args.paths = []
             exts = []
+
             for e in args.only_types:
                 e = e.lower().lstrip(".")
                 if e:
@@ -245,7 +248,7 @@ class ParsingService:
             default=argparse.SUPPRESS, 
             help="Limit depth to look for during .gitignore processing")
         
-        listing.add_argument("--hidden-items", "--all",
+        listing.add_argument("-a", "--hidden-items", "--all",
             action="store_true",
             default=argparse.SUPPRESS,
             help="Show hidden files and directories")
@@ -262,18 +265,6 @@ class ParsingService:
         listing.add_argument("--include-file-types", "--include-file-type", nargs="*", 
             default=argparse.SUPPRESS, dest="include_file_types", 
             help="Include files of certain types")
-        
-        listing.add_argument("-c", "--copy", action="store_true", 
-            default=argparse.SUPPRESS, 
-            help="Copy file contents and project structure to clipboard."
-                " Similar to --export but copies to the clipboard instead")
-        
-        listing.add_argument("-e", "--emoji", action="store_true", 
-            default=argparse.SUPPRESS, help="Show emojis in the output")
-        
-        listing.add_argument("-i", "--interactive", action="store_true", 
-            default=argparse.SUPPRESS, 
-            help="Use interactive mode for further file selection")
         
         listing.add_argument("--files-first", action="store_true", 
             default=argparse.SUPPRESS, help="Print files before directories")
@@ -309,7 +300,7 @@ class ParsingService:
         listing_control.add_argument("--no-gitignore", action="store_true", 
             default=argparse.SUPPRESS, help="Do not use .gitignore rules")
         
-        listing_control.add_argument("--no-files", action="store_true", 
+        listing_control.add_argument("--no-files", "--only-dirs", action="store_true", 
             default=argparse.SUPPRESS, help="Hide files (show only directories)")
 
 
@@ -318,14 +309,28 @@ class ParsingService:
         """
         Add semantic flags that provide quick, intuitive shortcuts for common operations.
         """
+        semantic = ap.add_argument_group("SEMANTIC FLAGS (QUICK ACTIONS)")
 
-        ap.add_argument("-f", "--full", action="store_true",
+        semantic.add_argument("-f", "--full", action="store_true",
             default=argparse.SUPPRESS,
-            help="Shortcut for --max-depth 5 in the output")
-        ap.add_argument(
+            help="Shortcut for --max-depth 5 - show full directory tree up to 5 levels deep")
+        
+        semantic.add_argument("-e", "--emoji", action="store_true", 
+            default=argparse.SUPPRESS, 
+            help="Show emojis in the output for better visual clarity")
+        
+        semantic.add_argument("-i", "--interactive", action="store_true", 
+            default=argparse.SUPPRESS, 
+            help="Use interactive mode for manual file selection after automatic filtering")
+        
+        semantic.add_argument("-c", "--copy", action="store_true", 
+            default=argparse.SUPPRESS, 
+            help="Copy file contents and project structure to clipboard (great for LLM prompts)")
+        
+        semantic.add_argument(
             "--only-types",
             nargs="+",
             metavar="EXT",
             default=argparse.SUPPRESS,
-            help="Include only these code extensions (e.g. --only-types py cpp tsx)"
+            help="Include only specific code extensions (e.g., --only-types py cpp tsx)"
         )

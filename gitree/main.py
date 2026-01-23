@@ -17,32 +17,12 @@ from .services.drawing_service import DrawingService
 from .services.zipping_service import ZippingService
 from .services.export_service import ExportService
 from .services.copy_service import CopyService
+from .services.flush_service import FlushService
 
 # from .services.zipping_service import ZippingService
 from .objects.app_context import AppContext
-from .objects.config import Config
 from .utilities.logging_utility import Logger
 from .services.interactive_selection_service import InteractiveSelectionService
-
-
-def flush_buffers(ctx: AppContext, config: Config):
-    """
-    Handle flushing the buffers.
-    """
-    if not config.no_printing: print()
-
-    # print the export only if not in no_printing and buffer not empty
-    if not config.no_printing and not ctx.output_buffer.empty():
-        ctx.output_buffer.flush()
-
-    # print the log if verbose mode
-    if config.verbose:
-        if not config.no_printing and not ctx.output_buffer.empty():
-            print()
-        print("LOG:")
-        ctx.logger.flush()
-
-    if not config.no_printing: print()
 
 
 def main() -> None:
@@ -61,17 +41,17 @@ def main() -> None:
 
 
     # Prepare the config object (this has all the args now)
-    config = ParsingService.parse_args(ctx)
+    config = ParsingService.run(ctx)
 
 
     # if general options used, they are executed here
     # Handles for --version, --config-user, --no-config
-    GeneralOptionsService.handle_args(ctx, config)
+    GeneralOptionsService.run(ctx, config)
 
 
     # This service returns all the items to include resolved in a dict
     # Hover over ItemsSelectionService to check the format which it returns
-    resolved_root = ItemsSelectionService.resolve_items(ctx, config, start_time)
+    resolved_root = ItemsSelectionService.run(ctx, config, start_time)
 
 
     # Select files interactively if requested
@@ -105,7 +85,7 @@ def main() -> None:
 
 
     # Flush the buffers to the console before exiting
-    flush_buffers(ctx, config)
+    FlushService.run(ctx, config)
 
 
 if __name__ == "__main__":
