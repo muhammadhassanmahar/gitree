@@ -243,9 +243,10 @@ class ParsingService:
             help="Copy file contents and project structure to clipboard (great for LLM prompts)")
         
         semantic.add_argument(
-            "--only-types",
+            "-t", "--types", "--only-types",
             nargs="+",
             metavar="EXT",
+            dest="only_types",
             default=argparse.SUPPRESS,
-            help="Include only specific code extensions (e.g., --only-types py cpp tsx)"
+            help="Include only specific code extensions (e.g., -t py cpp tsx)"
         )

@@ -95,9 +95,9 @@ For copying all C++ code in your project, with interactive selection:
 ```bash
 gt --full --copy --interactive --only-types cpp
 
-# OR alternaitvely, using alias
-# -i for interactive, -c for copy and -f for full
-gt -fci --only-types cpp
+# OR alternaitvely, using short aliases
+# -i for interactive, -c for copy, -f for full, -t for types
+gt -fcit cpp
 ```
 
 <img
@@ -138,7 +138,7 @@ For copying the whole project into a single file:
 # Default format for export is tree
 gt --full --export project --format tree
 
-# OR alternatively use alias
+# OR using aliases
 gt -fx project --format tree
 
 # OR use other formats
@@ -240,7 +240,7 @@ gt -fx project --format md
 | `-e`, `--emoji`   | Show **emojis** in the output for better visual clarity.                                      |
 | `-i`, `--interactive` | Use **interactive mode** for manual file selection after automatic filtering.            |
 | `-c`, `--copy`    | **Copy** file contents and project structure to **clipboard** (great for LLM prompts).        |
-| `--only-types`    | Include **only specific code extensions** (e.g., `--only-types py cpp tsx`).                  |
+| `-t`, `--types`, `--only-types` | Include **only specific code extensions** (e.g., `-t py cpp tsx`).            |
 
 ### Output & Export Options
 
