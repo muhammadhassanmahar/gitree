@@ -211,8 +211,6 @@ gt -fx project --fmt json
 
 
 
----
-
 ## ⚙️ Common Arguments
 
 ### General Options
